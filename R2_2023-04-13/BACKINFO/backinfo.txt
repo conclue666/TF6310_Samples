@@ -1,0 +1,52 @@
+#
+# Generated backup file, do not edit.
+#
+# Originally at: /hd0a/TEMP/backup.027899
+# 2023-04-13  14:53:52
+#
+>>SYSTEM_ID:
+660-506333
+
+>>PRODUCTS_ID:
+RobotWare Version: 6.14.00.01
+
+  RobotWare Base
+  840-1 EtherNet/IP Anybus Adapter
+  613-1 Collision Detection
+  Motor Commutation
+  Service Info System
+  Pendelum Calibration
+  Drive System IRB 460/640/660/760/4600/66xx/6700
+  IRB 660-250/3.15
+  Axis Calibration
+
+>>HOME:
+All public files and directories
+
+>>SYSPAR:
+SYS.cfg
+PROC.cfg
+MMC.cfg
+EIO.cfg
+SIO.cfg
+MOC.cfg
+
+
+>>TASK1: (T_ROB1,Robot 2,)
+SYSMOD/user.sys @ 
+PROGMOD/SMA_BoxPattern2B.mod @ 
+PROGMOD/MainModule.mod @ 
+PROGMOD/SMA_BoxPattern4.mod @ 
+PROGMOD/Proc_Support_Module.mod @ 
+PROGMOD/Proc_ForGripper_Module.mod @ 
+PROGMOD/SMA_BoxPattern2.mod @ 
+PROGMOD/SMA_BoxPattern3B.mod @ 
+PROGMOD/SMA_BoxPattern5.mod @ 
+PROGMOD/SMA_BoxPattern3.mod @ 
+PROGMOD/SMA_BoxPattern1.mod @ 
+PROGMOD/Func_Support_Module.mod @ 
+PROGMOD/Proc_Pattern_Select.mod @ 
+PROGMOD/SMA_BoxPattern5B.mod @ 
+
+
+>>EOF:

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SystemProperties>
+  <SystemName>660-506333</SystemName>
+  <SerialNo>660-506333</SerialNo>
+  <UsedMedia>
+    <Media path="RobotWare_6.14.0139" name="RobotWare" version="6.14.0139">
+    </Media>
+  </UsedMedia>
+  <ControlModule>
+    <Option descr="RobotWare Base">
+    </Option>
+    <Option descr="840-1 EtherNet/IP Anybus Adapter">
+    </Option>
+    <Option descr="613-1 Collision Detection">
+    </Option>
+  </ControlModule>
+  <DriveModule>
+    <Name>Robot1</Name>
+    <Option descr="Motor Commutation">
+    </Option>
+    <Option descr="Service Info System">
+    </Option>
+    <Option descr="Pendelum Calibration">
+    </Option>
+    <Option descr="Drive System IRB 460/640/660/760/4600/66xx/6700">
+    </Option>
+    <Option descr="IRB 660-250/3.15">
+    </Option>
+    <Option descr="Axis Calibration">
+    </Option>
+  </DriveModule>
+</SystemProperties>

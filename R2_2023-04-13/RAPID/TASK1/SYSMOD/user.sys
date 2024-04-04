@@ -1,0 +1,142 @@
+
+MODULE user (SYSMODULE)
+
+ ! Predefined user data
+ !*********************
+
+ ! Declaration of numeric registers reg1...reg5
+ VAR num reg1 := 0;
+ VAR num reg2 := 0;
+ VAR num reg3 := 0;
+ VAR num reg4 := 0;
+ VAR num reg5 := 0;
+
+ ! Declaration of stopwatch clock1
+ VAR clock clock1;
+
+ ! Template for declaration of workobject wobj1
+ !TASK PERS wobjdata wobj1 := [FALSE, TRUE, "", [[0, 0, 0],[1, 0, 0, 0]],[[0, 0, 0],[1, 0, 0, 0]]];
+    TASK PERS tooldata Gripper:=[TRUE,[[0,0,-194.3],[1,0,0,0]],[124.4,[-185.8,267.4,310],[1,0,0,0],0,0,8.637]];
+    TASK PERS tooldata Gripper1:=[TRUE,[[0,0,-194.3],[1,0,0,0]],[158,[-154,-2.106,-194.3],[1,0,0,0],26.9,17.7,36.6]];
+ 
+    CONST jointtarget rCalib:=[[0.413024,0.000515525,-0.0450064,0,0,0.199854],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget AaCalib:=[[1901.26,11.02,2046.94],[1.81232E-06,0.00115101,-1,8.39645E-09],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+ 
+ 
+    CONST robtarget HomePos:=[[1600,0,1900],[1.81232E-06,0.00185945,-0.999999,1.21831E-08],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget RejectPos:=[[1510.42,-1560.32,315.46],[0,0.0232172,0.99973,0],[-1,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox2A:=[[-139.94,-2224.44,161.47],[0,-0.000530557,1,0],[-2,0,-2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox2B:=[[-654.98,-1781.75,161.47],[0,0.70673,0.707484,0],[-2,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox2C:=[[-219.02,-2131.91,161.45],[0,1,0.000523882,0],[-2,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox2D:=[[-573.96,-1699.75,161.47],[0,0.707478,-0.706736,0],[-2,0,-3,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget BufferBox1:=[[1475.27,943.61,90],[1.76734E-06,0.707934,-0.706279,-3.90622E-07],[0,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    
+	CONST robtarget PlaceBox1A:=[[-276.17,2094.23,150],[0,0.00839628,0.999965,0],[1,0,1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox1B:=[[-791.45,1666.17,150],[0,0.712994,0.701171,0],[1,0,2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox1C:=[[-344.67,2181.21,150],[0,0.999965,-0.00839619,0],[1,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PlaceBox1D:=[[-708.6,1740.6,150],[0,-0.701174,0.71299,0],[1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget BufferBox2:=[[1865.01,1249.19,200.00],[1.0023E-06,0.999995,0.00329801,-1.50714E-06],[0,0,-2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    
+	PERS robtarget PlaceBox;
+	PERS robtarget BufferBox;
+	PERS robtarget PickBox;
+    PERS robtarget PickPail;
+    PERS robtarget PlacePail;
+    CONST robtarget PickBox1:=[[1545.63,518.28,570.35],[0,0.000677801,1,0],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget PickBox2:=[[1506.84,-677.14,577.88],[0,0.00792316,0.999969,0],[-1,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+   
+    
+    
+    VAR robtarget pPosCurrent;
+    VAR num OffsYonPick;
+    PERS num MySpeed:=0;
+    PERS num TimeClampClose:=0.51;
+    PERS num fRunMode:=0;
+    PERS num OffsPick:=0;
+    PERS num OffsPlaceX:=50;
+    PERS num OffsPlaceY:=0;
+    PERS num OffsPlaceZMax:=50;
+    PERS num PosBeforePickP:=1016.24;
+    PERS num PosAfterSearch:=-90;
+    PERS num OffsPlaceZ{2};
+    PERS num CyclePerLayer:=3;
+    PERS num XPlus:=0;
+    PERS num YPlus:=200;
+    PERS num TransitHeight:=211.06;
+    PERS num Pattern{2};
+	PERS bool BoxAtGripper;
+    VAR clock Clock2;
+    VAR num CycleTime;
+    VAR num SpeedRob;
+    VAR num rSpeedOverread;
+    PERS bool tHoming;
+    PERS bool tPicking;
+    PERS bool PP_Pallet;
+    PERS num UpPlace:=60;
+    PERS num DownPlace:=-5;
+
+    PERS num GapPail:=0;
+    PERS speeddata vPSearchP:=[28.5714,200,5000,1000];
+    
+    
+    !TASK PERS tooldata Gripper:=[TRUE,[[0,0,-200],[1,0,0,0]],[105,[3.5,111.527,-407.287],[1,0,0,0],9.657,7.202,13.394]];
+    TASK PERS loaddata load1:=[15,[0,0,-194.3],[1,0,0,0],0,0,0];
+    TASK PERS loaddata load2:=[30,[0,0,-194.3],[1,0,0,0],0,0,0];
+    TASK PERS loaddata load3:=[45,[0,0,-194.3],[1,0,0,0],0,0,0];
+    TASK PERS loaddata load4:=[60,[0,0,-194.3],[1,0,0,0],0,0,0];
+    PERS robtarget SearchPickP;
+    VAR robtarget p1;
+    VAR robtarget p2;
+    
+    VAR intnum CheckBoxint1;  ! === Var Untuk Interrupt Check Box
+    VAR intnum CheckBoxint2;
+    VAR intnum CheckBoxint3;  
+    VAR intnum CheckBoxint4;
+    VAR bool Mirror{2};
+    PERS num RefBoxL{2}; PERS num RefBoxW{2}; PERS num RefPailD;
+    PERS num xPallet{2}; PERS num yPallet{2};
+    VAR num BoxL{2}; VAR num BoxW{2}; VAR num BoxH{2}; VAR num PailD; VAR num PailH;
+    VAR num PalletX; VAR num PalletY;
+    VAR num LBox; VAR num WBox; VAR num HBox; 
+    VAR num Counter{2};
+    VAR num CounterPick{2};
+    PERS num QuantityBoxPlace{2};
+    PERS num QuantityBoxPick{2};
+    PERS num hMax:=1900; !---Setting Posisi Z maksimum
+    PERS num dEnableNumPickBox; !Syarat Jumlah Box di Picking untuk Pick Box Ready Nilai 2 atau 4
+    
+    PERS byte dPosBoxInGripper; !--- Posisi Box di gripper
+    PERS byte dCheckPosBoxInGripper; !--- Check Posisi Box di gripper
+    PERS num dLineBoxInGrip; !Box From Line ---> 1=From Line 1 ; 2= From Line 2; Dst...
+    PERS byte FlagOpenBoxInGripper;
+    PERS num dPosTriggerGripperClose;    
+    PERS num dPosTriggerGripperOpen;
+    PERS num dPlaceNumber; ! Placing Number
+    PERS num xofGripAtPick{2};
+    PERS num iSetOfGripAtPick{2}; !Nilai 1=Gripper mundur 1 langkah... 0=Posisi default gripper at pick 
+    PERS num iSetOfBoxAtPick{2}; !Nilai 1=Box mundur 25 mm... 0=Posisi default box at pick 
+    PERS num GapPiStpToFixClp{2}; !Jarak stopper pick dengan clampping tetap gripper tiap line
+    PERS num iRefPoint;
+    PERS speeddata vPlaceP;
+    VAR num Dist;
+    PERS num PiLine :=0;
+    PERS num PcLine :=2;
+    VAR num PalletLine;
+    VAR num inOfsLayer;
+    PERS num Layer{2};
+    VAR bool fInStandHome;      !---Flag In HomePos
+    VAR bool fInStandby;      !---Flag In Standby
+    PERS num fPickPlace; !0:At Standby; 11:PickL1; 12:PickL2; 
+                      !--------------21:PlaceL1; 22:PlaceL2;  
+    PERS num BypassCheckBoxWhenHome; !Flag bypass check box At gripper ketika akan homing nilai 1 = gripper di anggap kosong
+    PERS num BypassCheckBoxWhenPP;
+    VAR num iSensorBIG{6}; !-- Flag Sensor Box In Gripper
+    PERS pos CustomOffset; !-- Custom offset X,Y,Z Percycle
+    PERS pos CusOffLine{12,2,20}; !-- Custom offset X,Y,Z Percycle
+    PERS num CustomRz; !-- Custom rotasi gripper terhadap sumbu z Percycle
+    PERS num CusRzLine{12,2,20};
+    PERS num offsYPick:=5;
+
+ TASK PERS loaddata load5:=[68.3,[215.7,-739,-368],[1,0,0,0],0,0,0];
+ 
+ENDMODULE
